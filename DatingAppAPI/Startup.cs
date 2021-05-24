@@ -38,7 +38,7 @@ namespace DatingAppAPI
             services.AddControllers();
 
             //CORS
-            services.AddCors(policy => policy.AddPolicy("DatingAppPolicy", builder => builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod()));
+            services.AddCors(policy => policy.AddPolicy("DatingAppPolicy", builder => builder.WithOrigins("https://localhost:4200").AllowAnyHeader().AllowAnyMethod()));
 
             //SWAGGER, not necessary
             services.AddSwaggerGen(c =>
