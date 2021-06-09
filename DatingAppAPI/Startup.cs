@@ -1,6 +1,10 @@
 namespace DatingAppAPI
 {
     using DatingAppAPI.Data;
+    using DatingAppAPI.Extensions;
+    using DatingAppAPI.Services;
+    using DatingAppAPI.Services.Interfaces;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,10 +14,12 @@ namespace DatingAppAPI
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
+    using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
 
     public class Startup
@@ -28,17 +34,15 @@ namespace DatingAppAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //DB CONTEXT
-            services.AddDbContext<DataContext>(options =>
-            {
-                options.UseSqlServer(_configuration.GetConnectionString("DatingAppConnection"));
-            });
-
             //MVC
             services.AddControllers();
 
             //CORS
             services.AddCors(policy => policy.AddPolicy("DatingAppPolicy", builder => builder.WithOrigins("https://localhost:4200").AllowAnyHeader().AllowAnyMethod()));
+
+            //EXTENSION METHODS
+            services.AddApplicationServices(_configuration);
+            services.AddIdentityServices(_configuration);
 
             //SWAGGER, not necessary
             services.AddSwaggerGen(c =>
@@ -63,6 +67,7 @@ namespace DatingAppAPI
 
             app.UseCors("DatingAppPolicy");
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
