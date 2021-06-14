@@ -24,9 +24,6 @@ export class NavComponent implements OnInit {
     this.accountService.login(this.model)
       .subscribe(response => {
         this.router.navigateByUrl('/members');
-      }, error => {
-        console.log(error);
-        this.toastr.error(error.error);//http response is in error, but the error message is inside an error prop
       })
   }
 
