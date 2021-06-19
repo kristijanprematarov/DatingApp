@@ -14,12 +14,16 @@ namespace DatingAppAPI.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
+            //CLOUDINARY
+            services.Configure<CloudinarySettings>(configuration.GetSection("CloudinarySettings"));
+
             //REPOSITORIES
             services.AddScoped<IUserRepository, UserRepository>();
 
             //SERVICES
             services.AddScoped<ITokenService, TokenService>();
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
+            services.AddScoped<IPhotoService, PhotoService>();
 
             //DB CONTEXT
             services.AddDbContext<DataContext>(options =>
