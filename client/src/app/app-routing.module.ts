@@ -1,3 +1,5 @@
+import { PreventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.guard';
+import { MemberEditComponent } from './members/member-edit/member-edit.component';
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from '@angular/router'
 
@@ -19,7 +21,8 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         children: [
             { path: 'members', component: MemberListComponent },
-            { path: 'members/:id', component: MemberDetailComponent },
+            { path: 'members/:username', component: MemberDetailComponent },
+            { path: 'member/edit', component: MemberEditComponent, canDeactivate: [PreventUnsavedChangesGuard] },
             { path: 'lists', component: ListsComponent },
             { path: 'messages', component: MessagesComponent },
         ]
