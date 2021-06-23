@@ -24,6 +24,7 @@ namespace DatingAppAPI.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<LogUserActivity>();
 
             //DB CONTEXT
             services.AddDbContext<DataContext>(options =>
