@@ -19,6 +19,7 @@ namespace DatingAppAPI.Extensions
 
             //REPOSITORIES
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
 
             //SERVICES
             services.AddScoped<ITokenService, TokenService>();
