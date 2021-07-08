@@ -41,6 +41,11 @@ export class AccountService {
   }
 
   setCurrentUser(user: User) {
+    user.roles = [];
+    //inside the payload part of the token we have the "role" property
+    const roles = this.getDecodedToken(user.token).role;
+    //user can have one role => string .... or multiple => []
+    Array.isArray(roles) ? user.roles = roles : user.roles.push(roles);
     localStorage.setItem('user', JSON.stringify(user));
     this.currentUserSource.next(user);
     //with next we set the next value inside the observable
@@ -49,5 +54,11 @@ export class AccountService {
   logout() {
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
+  }
+
+  getDecodedToken(token) {
+    //token === string
+    //0 - Header, 1 - Payload(this is what we want), 2 - Signature 
+    return JSON.parse(atob(token.split('.')[1]));
   }
 }
