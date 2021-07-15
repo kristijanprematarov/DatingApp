@@ -15,4 +15,8 @@ export class AdminService {
     //Partial<User[]> we are only getting part of the user properties
     return this.httpClient.get<Partial<User[]>>(this.baseUrl + 'admin/users-with-roles');
   }
+
+  updateUserRoles(username: string, roles: string[]) {
+    return this.httpClient.post(this.baseUrl + 'admin/edit-roles/' + username + '?roles=' + roles, {});
+  }
 }
