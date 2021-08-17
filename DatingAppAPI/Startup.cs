@@ -40,7 +40,12 @@ namespace DatingAppAPI
             services.AddControllers();
 
             //CORS
-            services.AddCors(policy => policy.AddPolicy("DatingAppPolicy", builder => builder.WithOrigins("https://localhost:4200").AllowAnyHeader().AllowAnyMethod()));
+            services.AddCors(policy =>
+            policy.AddPolicy("DatingAppPolicy", builder =>
+                builder.WithOrigins("https://localhost:4200")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()));
 
             //EXTENSION METHODS
             services.AddApplicationServices(_configuration);
@@ -73,7 +78,9 @@ namespace DatingAppAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                //what route will this presence hub is going to be accessed from
                 endpoints.MapHub<PresenceHub>("hubs/presence");
+                endpoints.MapHub<MessageHub>("hubs/message");
             });
         }
     }

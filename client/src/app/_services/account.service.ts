@@ -1,3 +1,4 @@
+import { PresenceService } from './presence.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
@@ -15,7 +16,7 @@ export class AccountService {
   //1 => how many users .. either null or the current user object a.k.a => 1
   currentUser$ = this.currentUserSource.asObservable();
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private presenceService: PresenceService) { }
 
   login(model: any) {
     return this.httpClient.post(this.baseUrl + 'account/login', model)
@@ -24,6 +25,7 @@ export class AccountService {
           const user = response;
           if (user) {
             this.setCurrentUser(user);
+            this.presenceService.createHubConnection(user);
           }
         })
       );
@@ -35,6 +37,7 @@ export class AccountService {
         map((user: User) => {
           if (user) {
             this.setCurrentUser(user);
+            this.presenceService.createHubConnection(user);
           }
         })
       )
@@ -54,6 +57,7 @@ export class AccountService {
   logout() {
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
+    this.presenceService.stopHubConnection();
   }
 
   getDecodedToken(token) {

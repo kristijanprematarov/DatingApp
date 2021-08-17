@@ -1,6 +1,7 @@
 namespace DatingAppAPI.Extensions
 {
     using System.Text;
+    using System.Threading.Tasks;
     using DatingAppAPI.Data;
     using DatingAppAPI.Entities;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -34,6 +35,24 @@ namespace DatingAppAPI.Extensions
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["TokenKey"])),
                         ValidateIssuer = false, //API
                         ValidateAudience = false //ANGULAR client
+                    };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = httpContext =>
+                        {
+                            var accessToken = httpContext.Request.Query["access_token"];
+
+                            var path = httpContext.Request.Path;
+
+                            if (!string.IsNullOrEmpty(accessToken) &&
+                            path.StartsWithSegments("/hubs"))
+                            {
+                                httpContext.Token = accessToken;
+                            }
+
+                            return Task.CompletedTask;
+                        }
                     };
                 });
 

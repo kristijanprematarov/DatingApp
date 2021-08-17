@@ -9,11 +9,15 @@ namespace DatingAppAPI.Extensions
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using DatingAppAPI.Helpers;
+    using DatingAppAPI.SignalR;
 
     public static class ApplicationServiceExtensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
+            //Presence
+            services.AddSingleton<PresenceTracker>();
+
             //CLOUDINARY
             services.Configure<CloudinarySettings>(configuration.GetSection("CloudinarySettings"));
 
